@@ -1,0 +1,729 @@
+{
+  "swagger": "2.0",
+  "x-id": [
+    "datomic-qbuilder.routes.services/api"
+  ],
+  "info": {
+    "title": "datomic-qbuilder-api",
+    "version": "0.1",
+    "description": "TODO..."
+  },
+  "paths": {
+    "/api/ping": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/schema": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "title": "SchemaApiResponse",
+              "type": "object",
+              "properties": {
+                "entities": {
+                  "type": "array",
+                  "items": {
+                    "title": "SchemaEntity",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "implements": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "doc": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "array",
+                        "items": {
+                          "title": "SchemaAttribute",
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "entity": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "uniqueItems": true
+                            },
+                            "enum": {
+                              "type": "string"
+                            },
+                            "cardinality": {
+                              "enum": [
+                                "one",
+                                "many"
+                              ]
+                            },
+                            "unique": {
+                              "enum": [
+                                "identity",
+                                "value"
+                              ]
+                            },
+                            "index": {
+                              "type": "boolean"
+                            },
+                            "doc": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "type",
+                            "cardinality"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "attributes"
+                    ]
+                  }
+                },
+                "interfaces": {
+                  "type": "array",
+                  "items": {
+                    "title": "SchemaInterface",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "doc": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "array",
+                        "items": {
+                          "title": "SchemaAttribute",
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "entity": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "uniqueItems": true
+                            },
+                            "enum": {
+                              "type": "string"
+                            },
+                            "cardinality": {
+                              "enum": [
+                                "one",
+                                "many"
+                              ]
+                            },
+                            "unique": {
+                              "enum": [
+                                "identity",
+                                "value"
+                              ]
+                            },
+                            "index": {
+                              "type": "boolean"
+                            },
+                            "doc": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "type",
+                            "cardinality"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  }
+                },
+                "enums": {
+                  "type": "array",
+                  "items": {
+                    "title": "SchemaEnum",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "doc": {
+                        "type": "string"
+                      },
+                      "values": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "values"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "entities",
+                "enums"
+              ]
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [],
+        "tags": [
+          "DatabaseSchema"
+        ]
+      }
+    },
+    "/api/entity/lookup": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {}
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lookupExpression",
+            "description": "",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "tags": [
+          "EntityExplorer"
+        ]
+      }
+    },
+    "/api/entity/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {}
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "",
+            "type": "integer",
+            "required": true,
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "EntityExplorer"
+        ]
+      }
+    },
+    "/api/query": {
+      "post": {
+        "responses": {
+          "200": {
+            "schema": {
+              "title": "QueryApiResponse",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "hits": {
+                  "type": "array",
+                  "items": {
+                    "x-nullable": true
+                  }
+                }
+              },
+              "required": [
+                "total",
+                "hits"
+              ]
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "QueryApiRequest",
+            "description": "",
+            "required": true,
+            "schema": {
+              "title": "QueryApiRequest",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "string"
+                },
+                "where": {
+                  "type": "string"
+                },
+                "pull": {
+                  "type": "string"
+                },
+                "from": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "size": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "sortInstructions": {
+                  "type": "array",
+                  "items": {
+                    "title": "SortInstruction",
+                    "type": "object",
+                    "properties": {
+                      "sortExpression": {
+                        "type": "string"
+                      },
+                      "sortOrder": {
+                        "enum": [
+                          "asc",
+                          "dsc"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "sortExpression",
+                      "sortOrder"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull",
+                "from"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    },
+    "/api/query/to-builder-model": {
+      "post": {
+        "responses": {
+          "200": {
+            "schema": {
+              "title": "QueryBuilderModel",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "array",
+                  "items": {}
+                },
+                "where": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {},
+                    "x-anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "pull": {
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull"
+              ]
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "QueryModel",
+            "description": "",
+            "required": true,
+            "schema": {
+              "title": "QueryModel",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "string"
+                },
+                "where": {
+                  "type": "string"
+                },
+                "pull": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    },
+    "/api/query/from-builder-model": {
+      "post": {
+        "responses": {
+          "200": {
+            "schema": {
+              "title": "QueryModel",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "string"
+                },
+                "where": {
+                  "type": "string"
+                },
+                "pull": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull"
+              ]
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "QueryBuilderModel",
+            "description": "",
+            "required": true,
+            "schema": {
+              "title": "QueryBuilderModel",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "array",
+                  "items": {}
+                },
+                "where": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {},
+                    "x-anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "pull": {
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    },
+    "/api/query/save": {
+      "post": {
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "SaveQueryModel",
+            "description": "",
+            "required": true,
+            "schema": {
+              "title": "SaveQueryModel",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "find": {
+                  "type": "string"
+                },
+                "where": {
+                  "type": "string"
+                },
+                "pull": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "find",
+                "where",
+                "pull"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    },
+    "/api/query/load/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "title": "QueryModel",
+              "type": "object",
+              "properties": {
+                "find": {
+                  "type": "string"
+                },
+                "where": {
+                  "type": "string"
+                },
+                "pull": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "find",
+                "where",
+                "pull"
+              ]
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "description": "",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    },
+    "/api/query/list": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "consumes": [
+          "application/json",
+          "application/transit+msgpack",
+          "application/transit+json",
+          "application/edn"
+        ],
+        "parameters": [],
+        "tags": [
+          "DatomicQuery"
+        ]
+      }
+    }
+  }
+}

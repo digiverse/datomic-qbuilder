@@ -1,0 +1,141 @@
+{
+ :qbuilder/base-schema
+ {:txes [[
+          ;; qbuilder schema attributes
+          {:db/ident :qbuilder.schema/interface :db/doc "Schema hint: marker for interface"}
+          {:db/ident :qbuilder.schema/entity :db/doc "Schema hint: marker for entity"}
+
+          {:db/ident       :qbuilder.schema/type
+           :db/valueType   :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db/doc         "Schema hint: meta data describes what type of entity (one of: :qbuilder.schema/interface, :qbuilder.schema/entity)"
+           }
+
+          {:db/ident       :qbuilder.schema/implements
+           :db/valueType   :db.type/ref
+           :db/cardinality :db.cardinality/many
+           :db/doc         "Schema hint: meta data describes interface"
+           }
+
+          {:db/ident       :qbuilder.schema/refsEntity
+           :db/valueType   :db.type/ref
+           :db/cardinality :db.cardinality/many
+           :db/doc         "Schema hint: the entity the (reference type) attribute refers to"
+           }
+
+          {:db/ident       :qbuilder.schema/refsEnum
+           :db/valueType   :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db/doc         "Schema hint: namespace of enum the (reference type) attribute refers to"
+           }
+
+          {:db/ident       :qbuilder.save/name
+           :db/valueType   :db.type/string
+           ;TODO: fix this...
+           ;:db/unique      :db.unique/identity
+           ;:db/index       true
+           :db/cardinality :db.cardinality/one
+           :db/doc         "Used for saving queries"}
+
+          {:db/ident       :qbuilder.save/query
+           :db/valueType   :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db/doc         "Used for saving queries"}
+          ]]}
+
+ :qbuilder/supplemental-schema
+ ;; describe the original schema with use of qbuilder base attributes (see above)
+ {:txes [
+         ;; [
+         ;; interfaces that exist in the original schema
+         ;; no interfaces needed in this schema
+         ;; ]
+         [
+          ;; entities that exist in the original schema
+
+          {:db/ident             :abstractRelease
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: abstractRelease"}
+
+          {:db/ident             :artist
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: artist"}
+
+          {:db/ident             :country
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: country"}
+
+          {:db/ident             :label
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: label"}
+
+          {:db/ident             :language
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: language"}
+
+          {:db/ident             :medium
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: medium"}
+
+          {:db/ident             :release
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: release"}
+
+          {
+           :db/ident             :script
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: script"}
+
+          {:db/ident             :track
+           :qbuilder.schema/type :qbuilder.schema/entity
+           :db/doc               "Entity: track"}
+
+          ]
+         [
+          ;; supplemental attributes for existing entities (ref types)
+
+          {:db/ident                 :artist/type
+           :qbuilder.schema/refsEnum "artist.type"}
+
+          {:db/ident                 :artist/gender
+           :qbuilder.schema/refsEnum "artist.gender"}
+
+          {:db/ident                 :artist/country
+           :qbuilder.schema/refsEnum "country"}
+
+          {:db/ident                 :abstractRelease/type
+           :qbuilder.schema/refsEnum "release.type"}
+
+          {:db/ident                   :abstractRelease/artists
+           :qbuilder.schema/refsEntity :artist}
+
+          {:db/ident                 :release/country
+           :qbuilder.schema/refsEnum "country"}
+
+          {:db/ident                   :release/media
+           :qbuilder.schema/refsEntity :medium}
+
+          {:db/ident                 :release/packaging
+           :qbuilder.schema/refsEnum "release.packaging"}
+
+          {:db/ident                   :release/artists
+           :qbuilder.schema/refsEntity :artist}
+
+          {:db/ident                   :release/abstractRelease
+           :qbuilder.schema/refsEntity :abstractRelease}
+
+          {:db/ident                   :medium/tracks
+           :qbuilder.schema/refsEntity :track}
+
+          {:db/ident                 :medium/format
+           :qbuilder.schema/refsEnum "medium.format"}
+
+          {:db/ident                   :track/artists
+           :qbuilder.schema/refsEntity :artist}
+
+          {:db/ident                 :label/country
+           :qbuilder.schema/refsEnum "country"}
+
+          ]]
+  }
+ }

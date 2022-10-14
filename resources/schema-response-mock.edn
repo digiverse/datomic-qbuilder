@@ -1,0 +1,34 @@
+{:entities
+ [{:name :patient
+   :implements [:demographicsResource]
+   :doc "Some doc..."
+   :attributes
+   [{:name :patient/id
+     :type :string
+     :cardinality :one
+     :unique true
+     :doc "Some doc..."}
+    {:name :patient/ehrSubjectId
+     :type :string
+     :cardinality :one
+     :unique true
+     :doc "Some doc..."}
+    {:name :patient/gender
+     :type :ref
+     :enum :gender
+     :cardinality :one
+     :doc "Some doc..."}]}]
+ :interfaces
+ [{:name :demographicsResource
+   :doc  "Some doc..."
+   :attributes
+   [{:name :concept/value
+     :type :string
+     :cardinality :one
+     :unique :false
+     :doc "Some doc..."}]}]
+ :enums
+ [{:name :gender
+   :doc "Some doc..."
+   :values [:gender/female :gender/male]}]}
+
