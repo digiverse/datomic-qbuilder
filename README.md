@@ -4,6 +4,8 @@
 
 Datomic QBuilder is an attempt to create a different Datomic console than the one provided by Datomic.
 
+[Here's a quick video preview](media/DatomicQBuilderPreview.mp4) of some features of the QBuilder.
+
 ## Features
 ### Datalog Source
 In this view, one can compose/view a raw Datalog query with pull expression support.
