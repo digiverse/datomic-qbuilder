@@ -223,6 +223,11 @@
   [sort-attrs]
   (compare-many (vec (mapcat #(prepare-sort-comparator (:sortOrder %)) sort-attrs))))
 
+(defn transform-keywords-to-str
+  "Transforms all keywords to strings (coercion shows keywords without the colon)"
+  [col]
+  (sp/transform (sp/walker #(keyword? %)) str col))
+
 (defn query-datomic
   "performs a datomic query, returns the specified page of the result (from is the start index, page-size is the size)."
   [db find where pull sort-attrs page-size from]
@@ -240,6 +245,7 @@
                   (paginate page-size from)))
            (->> (paginate page-size from result)
                 (process-pull-pattern db pull)))
+         (transform-keywords-to-str)
          (hash-map :total total :hits))))
 
 ;; entity exploration functions
