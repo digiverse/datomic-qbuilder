@@ -3,7 +3,7 @@
     <template v-slot:body-cell="props">
       <q-td :props="props">
         <ResultsNestedTable v-if="Array.isArray(props.value)" :hits="props.value" :depth="depth + 1"/>
-        <router-link v-else-if="props.col.name === 'db/id'" :to="`/entity/${props.value}`">
+        <router-link v-else-if="props.col.name === ':db/id'" :to="`/entity/${props.value}`">
           {{ props.value }}
         </router-link>
         <span v-else>{{ props.value }}</span>
