@@ -14,6 +14,7 @@ import {defineComponent} from 'vue'
 import QueryEditor from '@/components/QueryEditor.vue'
 import ResultsNestedTable from '@/components/ResultsNestedTable.vue'
 import useGlobalState from '@/GlobalState'
+import useErrorState from "@/ErrorState";
 
 export default defineComponent({
   components: {ResultsNestedTable, QueryEditor},
@@ -21,6 +22,7 @@ export default defineComponent({
   setup() {
     return {
       ...useGlobalState(),
+      ...useErrorState()
     }
   },
   methods: {
@@ -28,6 +30,7 @@ export default defineComponent({
       this.getResultsForPage(req.pagination.page, req.pagination.rowsPerPage)
     },
     execute() {
+      this.clearError()
       this.resetPagination()
       this.getResults()
     },

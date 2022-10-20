@@ -179,6 +179,7 @@
 import {defineComponent, ref} from 'vue'
 import useGlobalState from '@/GlobalState'
 import useSchemaState from "@/SchemaState";
+import useErrorState from "@/ErrorState";
 
 export default defineComponent({
   components: {},
@@ -187,6 +188,7 @@ export default defineComponent({
     return {
       ...useGlobalState(),
       ...useSchemaState(),
+      ...useErrorState(),
     }
   },
   beforeCreate() {
@@ -207,6 +209,7 @@ export default defineComponent({
       this.getResultsForPage(req.pagination.page, req.pagination.rowsPerPage)
     },
     execute() {
+      this.clearError()
       this.resetPagination()
       this.getResults()
     },
