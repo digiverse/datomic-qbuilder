@@ -164,8 +164,11 @@
 ;; query datomic functions
 
 (defn paginate [page-size from col]
-  (->> (drop from col)
-       (take page-size)))
+  ;; if page-size equals 0, return all
+  (if (= page-size 0)
+    col
+    (->> (drop from col)
+         (take page-size))))
 
 (defn sort-result [sort-fns sort-cmps col]
   (sort-by (apply juxt sort-fns) sort-cmps col))

@@ -135,6 +135,7 @@ export default function useGlobalState() {
         loadQuery,
         resetPagination: () => {
             state.currentPage = 1
+            state.pageSize = DEFAULT_PAGE_SIZE
         },
         hitsDisplayOff,
         total: computed(() => {
