@@ -3,7 +3,7 @@ import openapi from '@/openapi'
 import type {HitModel} from '@/models/HitModel'
 import type QueryModel from "@/models/QueryModel";
 import type {QueryBuilderModel} from "@/models/QueryBuilderModel";
-import type {QueryApiResponse,} from "../service";
+import type {QueryApiResponse, SortInstruction,} from "../service";
 import {DatomicQueryApi} from "../service";
 
 const DEFAULT_PAGE_SIZE = 10
@@ -15,6 +15,7 @@ const state = reactive({
         find: '[]',
         where: '[]',
         pull: '[*]',
+        sortInstructions: [] as Array<SortInstruction>,
     } as QueryModel,
     builderModel: null as null | QueryBuilderModel,
     pullDisabled: false,
@@ -75,6 +76,7 @@ export default function useGlobalState() {
                     find: state.queryModel.find,
                     where: state.queryModel.where,
                     pull: sendPull ? state.queryModel.pull : '[]',
+                    sortInstructions: sendPull ? state.queryModel.sortInstructions : [],
                     from: (state.currentPage - 1) * state.pageSize,
                     size: state.pageSize,
                 }
@@ -108,6 +110,7 @@ export default function useGlobalState() {
                     find: state.queryModel.find,
                     where: state.queryModel.where,
                     pull: state.queryModel.pull,
+                    sortInstructions: state.queryModel.sortInstructions,
                 }
             })
         } finally {

@@ -381,10 +381,7 @@
                         "type": "string"
                       },
                       "sortOrder": {
-                        "enum": [
-                          "asc",
-                          "dsc"
-                        ]
+                        "type": "string"
                       }
                     },
                     "required": [
@@ -480,6 +477,25 @@
                 },
                 "pull": {
                   "type": "string"
+                },
+                "sortInstructions": {
+                  "type": "array",
+                  "items": {
+                    "title": "SortInstruction",
+                    "type": "object",
+                    "properties": {
+                      "sortExpression": {
+                        "type": "string"
+                      },
+                      "sortOrder": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sortExpression",
+                      "sortOrder"
+                    ]
+                  }
                 }
               },
               "required": [
@@ -511,6 +527,25 @@
                 },
                 "pull": {
                   "type": "string"
+                },
+                "sortInstructions": {
+                  "type": "array",
+                  "items": {
+                    "title": "SortInstruction",
+                    "type": "object",
+                    "properties": {
+                      "sortExpression": {
+                        "type": "string"
+                      },
+                      "sortOrder": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sortExpression",
+                      "sortOrder"
+                    ]
+                  }
                 }
               },
               "required": [
@@ -625,6 +660,25 @@
                 },
                 "pull": {
                   "type": "string"
+                },
+                "sortInstructions": {
+                  "type": "array",
+                  "items": {
+                    "title": "SortInstruction",
+                    "type": "object",
+                    "properties": {
+                      "sortExpression": {
+                        "type": "string"
+                      },
+                      "sortOrder": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sortExpression",
+                      "sortOrder"
+                    ]
+                  }
                 }
               },
               "required": [
@@ -657,6 +711,25 @@
                 },
                 "pull": {
                   "type": "string"
+                },
+                "sortInstructions": {
+                  "type": "array",
+                  "items": {
+                    "title": "SortInstruction",
+                    "type": "object",
+                    "properties": {
+                      "sortExpression": {
+                        "type": "string"
+                      },
+                      "sortOrder": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sortExpression",
+                      "sortOrder"
+                    ]
+                  }
                 }
               },
               "required": [

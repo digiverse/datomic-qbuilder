@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { SortInstruction } from './SortInstruction';
+import {
+    SortInstructionFromJSON,
+    SortInstructionFromJSONTyped,
+    SortInstructionToJSON,
+} from './SortInstruction';
+
 /**
  * 
  * @export
@@ -43,6 +50,12 @@ export interface SaveQueryModel {
      * @memberof SaveQueryModel
      */
     pull: string;
+    /**
+     * 
+     * @type {Array<SortInstruction>}
+     * @memberof SaveQueryModel
+     */
+    sortInstructions?: Array<SortInstruction>;
 }
 
 /**
@@ -72,6 +85,7 @@ export function SaveQueryModelFromJSONTyped(json: any, ignoreDiscriminator: bool
         'find': json['find'],
         'where': json['where'],
         'pull': json['pull'],
+        'sortInstructions': !exists(json, 'sortInstructions') ? undefined : ((json['sortInstructions'] as Array<any>).map(SortInstructionFromJSON)),
     };
 }
 
@@ -88,6 +102,7 @@ export function SaveQueryModelToJSON(value?: SaveQueryModel | null): any {
         'find': value.find,
         'where': value.where,
         'pull': value.pull,
+        'sortInstructions': value.sortInstructions === undefined ? undefined : ((value.sortInstructions as Array<any>).map(SortInstructionToJSON)),
     };
 }
 

@@ -240,7 +240,7 @@
         result (if sort-attrs (d/query {:query query :args [db]})
                               (d/qseq {:query query :args [db]}))
         total (count result)]
-    (->> (if sort-attrs
+    (->> (if (and sort-attrs (not-empty sort-attrs))
            (let [sort-fns (prepare-sort-fns sort-attrs)
                  sort-cmps (prepare-sort-comparators sort-attrs)]
              (->> (process-pull-pattern db pull result)
@@ -303,11 +303,12 @@
 
 (defn save-query
   "saves the query"
-  [^String query-name ^String find ^String where ^String pull]
+  [^String query-name ^String find ^String where ^String pull sort-instructions]
   (let [query (str (hash-map
                      :find (clojure.edn/read-string find)
                      :where (clojure.edn/read-string where)
-                     :pull (clojure.edn/read-string pull)))
+                     :pull (clojure.edn/read-string pull)
+                     :sortInstructions sort-instructions))
         tx-map {:db/id               "tempid"
                 :qbuilder.save/name  query-name
                 :qbuilder.save/query query}
@@ -336,7 +337,8 @@
               :where (str "["
                           (apply str (interpose "\n" (:where parsed)))
                           "]")
-              :pull (str (:pull parsed)))))
+              :pull (str (:pull parsed))
+              :sortInstructions (or (:sortInstructions parsed) []))))
 
 
 

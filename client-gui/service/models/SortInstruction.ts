@@ -27,10 +27,10 @@ export interface SortInstruction {
     sortExpression: string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof SortInstruction
      */
-    sortOrder: object;
+    sortOrder: string;
 }
 
 /**

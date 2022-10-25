@@ -166,6 +166,39 @@
       </q-btn-group>
     </div>
   </div>
+  <q-badge class="q-ma-sm q-pa-sm" color="primary" multi-line>Sort Builder</q-badge>
+  <div class="row" v-if="this.hasNoSort()">
+    <div class="col">
+      <q-btn-group rounded class="q-ma-sm">
+        <q-btn @click="addSort" :disable="this.disablePull" color="primary" icon="add"/>
+      </q-btn-group>
+    </div>
+  </div>
+  <div class="row" v-if="builderModel" v-for="(sort, index) in sortModel">
+    <div class="col-9">
+      <q-select :options="sortOptions"
+                @filter="(val, update) => sortFilter(val, update, index)"
+                v-model="this.queryModel.sortInstructions[index].sortExpression"
+                emit-value
+                use-input
+                fill-input
+                hide-selected
+                new-value-mode="add-unique"
+                :disable="this.disablePull"
+                dense class="q-ma-sm" outlined/>
+    </div>
+    <div class="col">
+      <q-btn-group rounded class="q-ma-sm">
+        <q-btn @click="changeSortDirection(index)" color="primary">{{sortDirectionModel[index]}}</q-btn>
+        <q-btn v-if="!hasNoSort()" @click="removeSort(index)" :disable="this.disablePull" color="primary"
+               icon="delete"/>
+        <q-btn v-if="index !== 0" @click="moveSort(index, true)" color="primary" icon="arrow_upward"/>
+        <q-btn v-if="!isLastSort(index)" @click="moveSort(index, false)" color="primary" icon="arrow_downward"/>
+        <q-btn v-if="canAddSort(index)" @click="addSort" :disable="this.disablePull" color="primary" icon="add"/>
+      </q-btn-group>
+    </div>
+  </div>
+
   <div class="q-ma-sm">
     <q-btn @click="execute" :disable="loading">Execute</q-btn>
     <q-btn v-if="results && !loading && displayHits" flat @click="goToResults">
@@ -191,17 +224,30 @@ export default defineComponent({
       ...useErrorState(),
     }
   },
-  beforeCreate() {
+  beforeCreate: function () {
     this.updateBuilderModel()
     if (this.schema == null) {
       this.getSchema()
     }
   },
+  computed: {
+    sortModel() {
+      return this.queryModel.sortInstructions.map(si => {
+        return si.sortExpression
+      })
+    },
+    sortDirectionModel() {
+      return this.queryModel.sortInstructions.map(si => {
+        return si.sortOrder
+      })
+    },
+  },
   data() {
     return {
       entityOptions: undefined as undefined | string[],
       attributeOptions: undefined as undefined | string[],
-      pullOptions: undefined as undefined | string[]
+      pullOptions: undefined as undefined | string[],
+      sortOptions: undefined as undefined | string[],
     }
   },
   methods: {
@@ -544,6 +590,68 @@ export default defineComponent({
         const needle = val.toLowerCase()
         this.pullOptions = attributes?.filter((v: string) => v.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    sortFilter(val: string, update: any, index: number) {
+      const entity = this.builderModel?.find[0][0]
+      const entityAtt = this.builderModel?.where.find(v => v.e === entity)?.a // E position
+      const valueAtt = this.builderModel?.where.find(v => v.v === entity)?.a // V position
+      // search by entity in E or V position
+      const entityName = entityAtt ?
+        entityAtt.split('/', 1)[0]
+        :
+        valueAtt?.split('/', 1)[0] as string | undefined
+      const attributes = entityName === undefined ?
+        this.getAttributeOptions()
+        :
+        this.getAttributeOptions()?.filter(v => v.startsWith(entityName))
+      attributes?.push(':db/ident')
+      if (val === '') {
+        update(() => {
+          this.sortOptions = attributes
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.sortOptions = attributes?.filter((v: string) => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    removeSort(index: number) {
+      this.queryModel.sortInstructions?.splice(index, 1)
+    },
+    canAddSort(index: number) {
+      return !this.pullDisabled
+    },
+    addSort() {
+      this.queryModel.sortInstructions.push({
+        sortExpression: "",
+        sortOrder: "asc",
+      })
+    },
+    changeSortDirection(index: number) {
+      if (this.queryModel.sortInstructions[index].sortOrder === 'asc') {
+        this.queryModel.sortInstructions[index].sortOrder = 'dsc'
+      } else {
+        this.queryModel.sortInstructions[index].sortOrder = 'asc'
+      }
+    },
+    isLastSort(index: number) {
+      if (this.queryModel.sortInstructions) {
+        return index === this.queryModel.sortInstructions.length - 1
+      }
+    },
+    hasNoSort() {
+      return this.queryModel.sortInstructions.length === 0
+    },
+    moveSort(index: number, moveUp: boolean) {
+      const toIndex: number = moveUp ? index - 1 : index + 1
+      let sort = this.queryModel.sortInstructions
+      if (sort) {
+        const element = sort[index];
+        sort.splice(index, 1);
+        sort.splice(toIndex, 0, element);
+      }
     },
   },
 

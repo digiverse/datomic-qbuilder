@@ -1,12 +1,16 @@
 <template>
   <div class="q-pa-md">
-    <q-input v-model="find" label="Find Expression (use the [?e ...] form to enable pull)" filled autogrow spellcheck="false"/>
+    <q-input v-model="find" label="Find Expression (use the [?e ...] form to enable pull)" filled autogrow
+             spellcheck="false"/>
   </div>
   <div class="q-pa-md">
     <q-input v-model="where" label="Where Expressions" filled autogrow spellcheck="false"/>
   </div>
   <div class="q-pa-md">
     <q-input v-model="pull" label="Pull" filled autogrow spellcheck="false" :disable="this.disablePull"/>
+  </div>
+  <div class="q-pa-md">
+    <q-input v-model="sort" label="Sort Instructions (use Datalog Builder to modify)" filled autogrow spellcheck="false" :disable="true"/>
   </div>
 </template>
 
@@ -32,7 +36,7 @@ export default defineComponent({
   computed: {
     find: {
       get: function () {
-        return this.modelValue.find.slice(1,-1)
+        return this.modelValue.find.slice(1, -1)
       },
       set: function (newValue: string) {
         this.$emit('update:modelValue', {...this.modelValue, find: "[" + newValue + "]"})
@@ -40,7 +44,7 @@ export default defineComponent({
     },
     where: {
       get: function () {
-        return this.modelValue.where.slice(1,-1)
+        return this.modelValue.where.slice(1, -1)
       },
       set: function (newValue: string) {
         this.$emit('update:modelValue', {...this.modelValue, where: "[" + newValue + "]"})
@@ -52,6 +56,18 @@ export default defineComponent({
       },
       set: function (newValue: string) {
         this.$emit('update:modelValue', {...this.modelValue, pull: newValue})
+      },
+    },
+    sort: {
+      get: function () {
+        return "[" +
+          this.modelValue.sortInstructions.map(si => {
+            return "[" + si.sortExpression + " " + si.sortOrder + "]"
+          }) +
+          "]"
+      },
+      set: function (newValue: string) {
+        this.$emit('update:modelValue', {...this.modelValue, sort: newValue})
       },
     },
   },

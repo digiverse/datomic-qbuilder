@@ -59,7 +59,7 @@
 (def sort-instructions-schema
   [:vector [:map {:title "SortInstruction"}
             [:sortExpression :string]
-            [:sortOrder [:enum "asc" "dsc"]]]])
+            [:sortOrder :string]]])                         ;; enum translates to "object" in openapi-generator-cli :-/
 
 (def query-request-schema
   [:map {:title "QueryApiRequest"}
@@ -79,7 +79,8 @@
   [:map {:title "QueryModel"}
    [:find :string]
    [:where :string]
-   [:pull :string]])
+   [:pull :string]
+   [:sortInstructions {:optional true} sort-instructions-schema]])
 
 (def eavt
   [:map {:title "EAVT"}
@@ -101,7 +102,8 @@
    [:name :string]
    [:find :string]
    [:where :string]
-   [:pull :string]])
+   [:pull :string]
+   [:sortInstructions {:optional true} sort-instructions-schema]])
 
 (def entity-response-schema
   [:map {:closed false}])
@@ -227,9 +229,9 @@
             :parameters  {:body save-query-schema}
             :responses   {200 {:body :string}}
             :handler     (fn [req]
-                           (let [{:keys [name find where pull]} (:body-params req)]
+                           (let [{:keys [name find where pull sortInstructions]} (:body-params req)]
                              {:status 200
-                              :body   (db/save-query name find where pull)}))
+                              :body   (db/save-query name find where pull sortInstructions)}))
             }}]
 
    ["/query/load/:name"

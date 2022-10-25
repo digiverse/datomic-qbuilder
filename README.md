@@ -12,6 +12,8 @@ In this view, one can compose/view a raw Datalog query with pull expression supp
 The pull expression is enabled if the find is in the collection form, e.g. 
 `[?e ...]`. If the find is in other form, the pull expression is disabled and ignored. 
 
+NOTE: sorting instruction definitions are currently supported only in the Datalog Builder view.
+
 ### Datalog Builder
 In this view, one can use the builder for building where and pull expressions.
 
@@ -28,14 +30,19 @@ another entity, a "Link" button will add a where expression that links to the cu
 entity.
 
 #### Pull Section
-The pull expressions that also support nested attributes in case of reference attribute
+The pull expressions that also support nested attributes in case of reference attribute.
+
+NOTE: the pull section is enabled only if the find expression is in the `[?e ...]` form.
+
+#### Sorting of Results
+Sorting can currently be specified on simple attributes, nested attribute sorting (in case of reference attributes) and
+advanced expressions (we are using specter on the backend) will also be supported in the future.
+
+NOTE: the sorting section is enabled only if the find expression is in the `[?e ...]` form.
 
 ### Nested Results Display
 The results are able to display nested data (e.g. the data obtained from Datomic by the use
 of the '*' pull expression)
-
-### Intelligent Sorting of Results
-Not yet implemented
 
 ### Schema Viewer
 Not yet implemented
